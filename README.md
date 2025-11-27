@@ -32,7 +32,7 @@
 
 ## 快速开始
 
-### 使用 Docker Compose（推荐）
+### 方式一：使用启动脚本（推荐 - 本地开发）
 
 1. 克隆项目
 ```bash
@@ -40,9 +40,38 @@ git clone https://github.com/lll-hhh/Exam_System.git
 cd Exam_System
 ```
 
-2. 启动所有服务
+2. 配置数据库
 ```bash
-docker-compose up -d
+# 确保MySQL已安装并运行，然后导入数据库
+mysql -u root -p < init-db/init.sql
+```
+
+3. 一键启动
+```bash
+chmod +x start.sh
+./start.sh
+```
+
+4. 访问应用
+- 前端地址：http://localhost:3000
+- 后端API：http://localhost:8080
+
+5. 停止服务
+```bash
+./stop.sh
+```
+
+### 方式二：使用 Docker Compose（推荐 - 生产环境）
+
+1. 克隆项目
+```bash
+git clone https://github.com/lll-hhh/Exam_System.git
+cd Exam_System
+```
+
+2. 启动所有服务（包含数据库）
+```bash
+docker compose up -d
 ```
 
 3. 访问应用
@@ -50,18 +79,12 @@ docker-compose up -d
 - 后端API：http://localhost:8080
 - 数据库：localhost:3306
 
-4. 默认管理员账号
-- 用户名：admin
-- 密码：admin123
-
-### 手动部署
-
-#### 后端
+4. 停止服务
 ```bash
-cd backend
-mvn clean package
-java -jar target/exam-1.0-SNAPSHOT.jar
+docker compose down
 ```
+
+### 方式三：手动启动
 
 #### 前端
 ```bash
@@ -70,11 +93,21 @@ npm install
 npm run dev
 ```
 
+#### 后端
+```bash
+cd backend
+mvn spring-boot:run
+```
+
 #### 数据库
 ```bash
 # 导入 init-db/init.sql 到 MySQL
 mysql -u root -p < init-db/init.sql
 ```
+
+### 默认管理员账号
+- 用户名：admin
+- 密码：admin123
 
 ## 项目结构
 
@@ -99,7 +132,11 @@ mysql -u root -p < init-db/init.sql
 │   └── package.json
 ├── init-db/               # 数据库初始化脚本
 │   └── init.sql
+├── logs/                  # 日志目录
 ├── docker-compose.yml     # Docker编排文件
+├── start.sh              # 启动脚本
+├── stop.sh               # 停止脚本
+├── STARTUP.md            # 启动说明文档
 └── README.md
 ```
 
